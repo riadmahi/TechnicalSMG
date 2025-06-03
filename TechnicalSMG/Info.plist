@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>BRSonoma-Black.otf</string>
+		<string>BRSonoma-Bold.otf</string>
+		<string>BRSonoma-Medium.otf</string>
+		<string>BRSonoma-SemiBold.otf</string>
+		<string>BRSonoma-Regular.otf</string>
+		<string>BRSonoma-Light.otf</string>
+	</array>
+</dict>
+</plist>
