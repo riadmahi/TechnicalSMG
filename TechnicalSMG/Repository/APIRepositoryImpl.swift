@@ -60,5 +60,38 @@ class APIRepositoryImpl: APIRepository {
         }
         task.resume()
     }
-
+    
+    func createPost(title: String, body: String, completion: @escaping (Post?, Error?) -> Void) {
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+            completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
+            return
+        }
+        let postPayload = Post(userId: 1, id: 0, title: title, body: body)
+        guard let httpBody = try? JSONEncoder().encode(postPayload) else {
+           completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to encode post"]))
+           return
+       }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = httpBody
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data returned"]))
+                return
+            }
+            
+            do {
+                let post = try JSONDecoder().decode(Post.self, from: data)
+                completion(post, nil)
+            } catch {
+                completion(nil, error)
+            }
+        }.resume()
+    }
 }
