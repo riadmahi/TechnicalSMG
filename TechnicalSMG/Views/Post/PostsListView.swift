@@ -14,28 +14,51 @@ struct PostsListView: View {
     
     var body: some View {
         NavigationView {
-            Group {
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                } else if viewModel.posts.isEmpty {
-                    ProgressView("Loading...")
-                        .onAppear {
-                            viewModel.loadPosts()
+            ZStack {
+                Group {
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                    } else if viewModel.posts.isEmpty {
+                        ProgressView("Loading...")
+                            .onAppear {
+                                viewModel.loadPosts()
+                            }
+                    } else {
+                        List(viewModel.posts) { post in
+                            NavigationLink(destination: PostDetailsView(post: post)) {
+                                PostView(post: post)
+                            }
                         }
-                } else {
-                    
-                    List(viewModel.posts) { post in
-                        NavigationLink(destination: PostDetailsView(post: post)) {
-                            PostView(post: post)
-                        }
+                        .listStyle(PlainListStyle())
                     }
-                    .listStyle(PlainListStyle())
                 }
+                .navigationTitle("Posts")
+                
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        //Navigate to -> New post
+                    }) {
+                        Label {
+                            Text("Add new post")
+                                .brSonomaFont(.medium, 16)
+                        } icon: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 16, weight: .medium))
+                        }
+                        .foregroundColor(Color("OnButtonColor"))
+                        .padding(.vertical, 20)
+                        .padding(.horizontal, 32)
+                        .background(Color("ButtonColor"))
+                        .clipShape(Capsule())
+                    }
+                    .padding(.bottom, 20)
+                }
+                
             }
-            .navigationTitle("Posts")
             .background(Color("BackgroundColor"))
         }
     }
