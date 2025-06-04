@@ -39,9 +39,7 @@ struct PostsListView: View {
                 
                 VStack {
                     Spacer()
-                    Button(action: {
-                        //Navigate to -> New post
-                    }) {
+                    NavigationLink(destination: NewPostView()) {
                         Label {
                             Text("Add new post")
                                 .brSonomaFont(.medium, 16)
