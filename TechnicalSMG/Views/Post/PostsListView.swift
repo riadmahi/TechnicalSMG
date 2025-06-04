@@ -27,20 +27,13 @@ struct PostsListView: View {
                         }
                 } else {
                     List(viewModel.posts) { post in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(post.title)
-                                .font(.headline)
-                            Text(post.body)
-                                .font(.subheadline)
-                                .lineLimit(2)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.vertical, 8)
+                       PostView(post: post)
                     }
                     .listStyle(PlainListStyle())
                 }
             }
             .navigationTitle("Posts")
+            .background(Color("BackgroundColor"))
         }
     }
 }
