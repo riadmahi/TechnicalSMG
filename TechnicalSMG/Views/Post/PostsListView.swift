@@ -18,27 +18,32 @@ struct PostsListView: View {
     
     var body: some View {
         ZStack {
-            Group {
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                } else if viewModel.posts.isEmpty {
-                    ProgressView("Loading...")
-                        .onAppear {
-                            viewModel.loadPosts()
+            VStack {
+                Image("BrandIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                Group {
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                    } else if viewModel.posts.isEmpty {
+                        ProgressView("Loading...")
+                            .onAppear {
+                                viewModel.loadPosts()
+                            }
+                    } else {
+                        List(viewModel.posts) { post in
+                            NavigationLink(destination: PostDetailsView(post: post, repository: repository)) {
+                                PostView(post: post)
+                            }
                         }
-                } else {
-                    List(viewModel.posts) { post in
-                        NavigationLink(destination: PostDetailsView(post: post, repository: repository)) {
-                            PostView(post: post)
-                        }
+                        .listStyle(PlainListStyle())
                     }
-                    .listStyle(PlainListStyle())
                 }
             }
-            .navigationTitle("Posts")
             
             VStack {
                 Spacer()
