@@ -56,4 +56,29 @@ final class APIRepositoryImplTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    /// Tests that createPost returns a post with correct values and no error.
+    func testCreatePostReturnsValidPost() {
+        let repository = APIRepositoryImpl()
+        let expectation = XCTestExpectation(description: "createPost should return a valid Post without error")
+
+        let fakeTitle = "Fake Post Title"
+        let fakeBody = "This is the body of the fake post"
+
+        repository.createPost(title: fakeTitle, body: fakeBody) { post, error in
+            XCTAssertNil(error, "Expected no error when creating post")
+            XCTAssertNotNil(post, "Expected a valid post object")
+
+            if let post = post {
+                XCTAssertEqual(post.title, fakeTitle, "Returned post title should match input")
+                XCTAssertEqual(post.body, fakeBody, "Returned post body should match input")
+                XCTAssertEqual(post.userId, 1, "User ID should be 1 for the mock API")
+                XCTAssertGreaterThan(post.id, 0, "Returned post ID should be greater than 0")
+            }
+
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5.0)
+    }
 }
