@@ -17,52 +17,50 @@ struct PostsListView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Group {
-                    if let error = viewModel.errorMessage {
-                        Text(error)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                    } else if viewModel.posts.isEmpty {
-                        ProgressView("Loading...")
-                            .onAppear {
-                                viewModel.loadPosts()
-                            }
-                    } else {
-                        List(viewModel.posts) { post in
-                            NavigationLink(destination: PostDetailsView(post: post, repository: repository)) {
-                                PostView(post: post)
-                            }
+        ZStack {
+            Group {
+                if let error = viewModel.errorMessage {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                } else if viewModel.posts.isEmpty {
+                    ProgressView("Loading...")
+                        .onAppear {
+                            viewModel.loadPosts()
                         }
-                        .listStyle(PlainListStyle())
-                    }
-                }
-                .navigationTitle("Posts")
-                
-                VStack {
-                    Spacer()
-                    NavigationLink(destination: NewPostView(repository: repository)) {
-                        Label {
-                            Text("Add new post")
-                                .brSonomaFont(.medium, 16)
-                        } icon: {
-                            Image(systemName: "plus")
-                                .font(.system(size: 16, weight: .medium))
+                } else {
+                    List(viewModel.posts) { post in
+                        NavigationLink(destination: PostDetailsView(post: post, repository: repository)) {
+                            PostView(post: post)
                         }
-                        .foregroundColor(Color("OnButtonColor"))
-                        .padding(.vertical, 20)
-                        .padding(.horizontal, 32)
-                        .background(Color("ButtonColor"))
-                        .clipShape(Capsule())
                     }
-                    .padding(.bottom, 20)
+                    .listStyle(PlainListStyle())
                 }
-                
             }
-            .background(Color("BackgroundColor"))
+            .navigationTitle("Posts")
+            
+            VStack {
+                Spacer()
+                NavigationLink(destination: NewPostView(repository: repository)) {
+                    Label {
+                        Text("Add new post")
+                            .brSonomaFont(.medium, 16)
+                    } icon: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 16, weight: .medium))
+                    }
+                    .foregroundColor(Color("OnButtonColor"))
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 32)
+                    .background(Color("ButtonColor"))
+                    .clipShape(Capsule())
+                }
+                .padding(.bottom, 20)
+            }
+            
         }
+        .background(Color("BackgroundColor"))
     }
 }
 

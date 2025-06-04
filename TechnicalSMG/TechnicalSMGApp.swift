@@ -13,7 +13,9 @@ struct TechnicalSMGApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PostsListView(repository: repository)
+            NavigationView {
+                PostsListView(repository: repository)
+            }
         }
     }
 }
