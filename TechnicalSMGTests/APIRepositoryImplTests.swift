@@ -29,4 +29,31 @@ final class APIRepositoryImplTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    
+    /// Tests that fetchComments returns at least one Comment without an error.
+    func testFetchCommentsReturnsNonEmptyArray() {
+        let repository = APIRepositoryImpl()
+        let expectation = XCTestExpectation(description: "fetchComments should return a non-empty array without error")
+        
+        // Use postId = 1, which is known to have comments in JSONPlaceholder
+        repository.fetchComments(for: 1) { comments, error in
+            XCTAssertNil(error, "Expected no error when fetching comments")
+            XCTAssertNotNil(comments, "Expected to receive an array of comments")
+            
+            if let comments = comments {
+                XCTAssertFalse(comments.isEmpty, "The comments array should not be empty")
+                
+                let first = comments.first!
+                XCTAssertEqual(first.postId, 1, "The first comment’s postId should match the requested postId")
+                XCTAssertGreaterThan(first.id, 0, "The first comment’s id should be greater than 0")
+                XCTAssertFalse(first.name.isEmpty, "The first comment’s name should not be empty")
+                XCTAssertFalse(first.body.isEmpty, "The first comment’s body should not be empty")
+                XCTAssertFalse(first.email.isEmpty, "The first comment’s email should not be empty")
+            }
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
 }
