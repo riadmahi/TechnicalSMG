@@ -11,7 +11,7 @@ import SwiftUI
 
 struct PostsListView: View {
     @ObservedObject var viewModel: PostViewModel
-
+    
     var body: some View {
         NavigationView {
             Group {
@@ -26,8 +26,11 @@ struct PostsListView: View {
                             viewModel.loadPosts()
                         }
                 } else {
+                    
                     List(viewModel.posts) { post in
-                       PostView(post: post)
+                        NavigationLink(destination: PostDetailsView(post: post)) {
+                            PostView(post: post)
+                        }
                     }
                     .listStyle(PlainListStyle())
                 }
