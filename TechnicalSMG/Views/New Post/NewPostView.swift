@@ -28,7 +28,7 @@ struct NewPostView: View {
                     .padding(16)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color("ContainerColor"))
+                            .fill(Color("CardColor"))
                             .stroke(Color("LineColor"), lineWidth: 1)
                     )
                     .padding(.horizontal, 20)
@@ -38,7 +38,7 @@ struct NewPostView: View {
                     .padding(16)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color("ContainerColor"))
+                            .fill(Color("CardColor"))
                             .stroke(Color("LineColor"), lineWidth: 1)
                     )
                     .padding(.horizontal, 20)
@@ -55,12 +55,12 @@ struct NewPostView: View {
                     } else {
                         Text("Create")
                             .brSonomaFont(.medium, 16)
-                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                     }
                 }
                 .padding(.vertical, 20)
                 .padding(.horizontal, 32)
+                .foregroundColor(Color("OnButtonColor"))
                 .background(Color("ButtonColor"))
                 .clipShape(Capsule())
                 .padding(.horizontal, 20)
