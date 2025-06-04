@@ -7,4 +7,5 @@
 
 protocol APIRepository {
     func fetchPosts(completion: @escaping ([Post]?, Error?) -> Void)
+    func fetchComments(for postId: Int, completion: @escaping ([Comment]?, Error?) -> Void)
 }
