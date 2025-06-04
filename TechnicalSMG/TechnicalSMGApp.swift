@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct TechnicalSMGApp: App {
-    @StateObject private var viewModel = PostViewModel(repository: APIRepositoryImpl())
+    let repository = APIRepositoryImpl()
 
     var body: some Scene {
         WindowGroup {
-            PostsListView(viewModel: viewModel)
+            PostsListView(repository: repository)
         }
     }
 }

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PostDetailsView: View {
+struct PostDetailsView: View {    
     @StateObject private var viewModel: PostDetailsViewModel
-
-    init(post: Post) {
-        _viewModel = StateObject(wrappedValue: PostDetailsViewModel(post: post))
+    
+    init(post: Post, repository: APIRepository) {
+        _viewModel = StateObject(wrappedValue: PostDetailsViewModel(post: post, repository: repository))
     }
 
     var body: some View {

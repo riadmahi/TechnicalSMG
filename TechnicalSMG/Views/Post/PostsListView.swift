@@ -7,10 +7,14 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct PostsListView: View {
-    @ObservedObject var viewModel: PostViewModel
+    @StateObject private var viewModel: PostViewModel
+    private let repository: APIRepository
+    
+    init(repository: APIRepository) {
+        self.repository = repository
+        _viewModel = StateObject(wrappedValue: PostViewModel(repository: repository))
+    }
     
     var body: some View {
         NavigationView {
@@ -28,7 +32,7 @@ struct PostsListView: View {
                             }
                     } else {
                         List(viewModel.posts) { post in
-                            NavigationLink(destination: PostDetailsView(post: post)) {
+                            NavigationLink(destination: PostDetailsView(post: post, repository: repository)) {
                                 PostView(post: post)
                             }
                         }
@@ -39,7 +43,7 @@ struct PostsListView: View {
                 
                 VStack {
                     Spacer()
-                    NavigationLink(destination: NewPostView()) {
+                    NavigationLink(destination: NewPostView(repository: repository)) {
                         Label {
                             Text("Add new post")
                                 .brSonomaFont(.medium, 16)
@@ -63,10 +67,5 @@ struct PostsListView: View {
 }
 
 #Preview {
-    let viewModel = PostViewModel(repository: APIRepositoryImpl())
-    viewModel.posts = [
-        Post(userId: 1, id: 1, title: "Title 1", body: "This is an example of a body"),
-        Post(userId: 2, id: 2, title: "Another title", body: "This is another example of a body.")
-    ]
-    return PostsListView(viewModel: viewModel)
+    return PostsListView(repository: APIRepositoryImpl())
 }

@@ -19,7 +19,7 @@ class PostDetailsViewModel: ObservableObject {
         
     private let repository: APIRepository
         
-    init(post: Post, repository: APIRepository = APIRepositoryImpl()) {
+    init(post: Post, repository: APIRepository) {
         self.post = post
         self.repository = repository
     }
