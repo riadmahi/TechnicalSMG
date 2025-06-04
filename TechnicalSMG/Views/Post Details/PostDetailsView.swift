@@ -7,95 +7,120 @@
 
 import SwiftUI
 
-struct PostDetailsView: View {    
+import SwiftUI
+
+struct PostDetailsView: View {
     @StateObject private var viewModel: PostDetailsViewModel
-    
+
     init(post: Post, repository: APIRepository) {
         _viewModel = StateObject(wrappedValue: PostDetailsViewModel(post: post, repository: repository))
     }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                AsyncImage(url: URL(string: "https://picsum.photos/seed/600/300")) { phase in
-                    switch phase {
-                    case .empty:
-                        ZStack {
-                            Color.gray.opacity(0.2)
-                            ProgressView()
-                        }
-                        .frame(height: 200)
-                        .cornerRadius(12)
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 200)
-                            .clipped()
-                            .cornerRadius(12)
-                    case .failure:
-                        ZStack {
-                            Color.gray.opacity(0.2)
-                            Image(systemName: "photo")
-                                .font(.largeTitle)
-                                .foregroundColor(.gray)
-                        }
-                        .frame(height: 200)
-                        .cornerRadius(12)
-                    @unknown default:
-                        EmptyView()
-                    }
+            VStack(spacing: 0) {
+                imageHeader
+
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(viewModel.post.title)
+                        .brSonomaFont(.medium, 20)
+                        .foregroundColor(.primary)
+                        .padding(.horizontal, 24)
+
+                    Text(viewModel.post.body)
+                        .brSonomaFont(.regular, 18)
+                        .lineSpacing(4)
+                        .padding(.horizontal, 24)
+
+                    commentsSection
                 }
-                .padding(.bottom, 8)
-
-                Text(viewModel.post.title)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-
-                Text(viewModel.post.body)
-                    .font(.body)
-                    .foregroundColor(.primary)
-                    .lineSpacing(4)
-
-                Divider()
-
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .padding(.vertical, 8)
-                } else if viewModel.comments.isEmpty {
-                    ProgressView("Loading...")
-                        .padding(.vertical, 8)
-                } else {
-                    ForEach(viewModel.comments) { comment in
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(comment.name)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text(comment.body)
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                            Text("\(comment.email)")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.05))
-                        .cornerRadius(8)
-                        .padding(.bottom, 4)
-                    }
-                }
-
-                Spacer()
+                .padding(.top, 24)
             }
-            .padding()
         }
+        .ignoresSafeArea(edges: .top)
         .navigationTitle("Post Details")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.loadComments()
         }
-        .padding()
+    }
+
+
+    private var imageHeader: some View {
+        ZStack {
+            Color.gray.opacity(0.2)
+
+            AsyncImage(url: URL(string: "https://picsum.photos/1200/800")) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .transition(.opacity)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .transition(.opacity)
+                case .failure:
+                    Image(systemName: "photo")
+                        .font(.largeTitle)
+                        .foregroundColor(.gray)
+                        .transition(.opacity)
+                @unknown default:
+                    EmptyView()
+                }
+            }
+        }
+        .frame(height: 300)
+        .clipped()
+    }
+
+    private var commentsSection: some View {
+        Group {
+            if let error = viewModel.errorMessage {
+                Text(error)
+                    .foregroundColor(.red)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 8)
+            } else if viewModel.comments.isEmpty {
+                ProgressView("Loading comments...")
+                    .padding(.horizontal, 24)
+                    .padding(.top, 8)
+            } else {
+                VStack(spacing: 12) {
+                    HStack(spacing: 12) {
+                        Image("CommentIcon")
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(Color("SilverColor"))
+
+                        Text("3 Comments")
+                            .brSonomaFont(.medium, 16)
+                            .foregroundColor(Color("SilverColor"))
+                        Spacer()
+                    }
+                    .padding(.horizontal, 24)
+
+                    ForEach(viewModel.comments) { comment in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(comment.email)
+                                    .brSonomaFont(.medium, 12)
+                                    .foregroundColor(.accentColor)
+                                Text(comment.name)
+                                    .brSonomaFont(.medium, 14)
+                                Text(comment.body)
+                                    .brSonomaFont(.regular, 13)
+                                
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.05))
+                        .cornerRadius(8)
+                        .padding(.horizontal, 24)
+                    }
+                }
+                .padding(.top, 8)
+            }
+        }
     }
 }
