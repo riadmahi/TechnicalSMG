@@ -27,12 +27,12 @@ class NewPostViewModel: ObservableObject {
     
     func createPost(onSuccess: @escaping () -> Void) {
         guard !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            showToast(message: "Title is required", style: .error)
+            showToast(message: NSLocalizedString("error_title_required", comment: ""), style: .error)
             return
         }
 
         guard !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            showToast(message: "Description is required", style: .error)
+            showToast(message: NSLocalizedString("error_description_required", comment: ""), style: .error)
             return
         }
 
@@ -43,9 +43,9 @@ class NewPostViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.isPosting = false
                 if let error = error {
-                    self.showToast(message: "Failed to create post: \(error.localizedDescription)", style: .error)
+                    self.showToast(message: String(format: NSLocalizedString("error_post_failed", comment: ""), error.localizedDescription), style: .error)
                 } else {
-                    self.showToast(message: "Post created successfully!", style: .success)
+                    self.showToast(message: NSLocalizedString("success_post_created", comment: ""), style: .success)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         onSuccess()
                         self.title = ""
@@ -66,4 +66,3 @@ class NewPostViewModel: ObservableObject {
         }
     }
 }
-

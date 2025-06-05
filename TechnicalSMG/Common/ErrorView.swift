@@ -14,7 +14,7 @@ struct ErrorView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Oops! Something went wrong")
+            Text("error_title")
                 .brSonomaFont(.medium, 22)
                 .multilineTextAlignment(.center)
 
@@ -25,7 +25,7 @@ struct ErrorView: View {
             
             if showRetryButton {
                 Button(action: onRetry){
-                    Text("Retry")
+                    Text("retry_button")
                         .brSonomaFont(.medium, 16)
                         .foregroundColor(Color("OnButtonColor"))
                 }

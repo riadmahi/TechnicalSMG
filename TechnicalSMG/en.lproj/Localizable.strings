@@ -1,0 +1,24 @@
+//
+//  Localizable.strings
+//  TechnicalSMG
+//
+//  Created by Riad on 05/06/2025.
+//
+
+"loading" = "Loading...";
+"post_details" = "Post details";
+"comments" = "Comments";
+"add_new_post" = "Add new post";
+"no_posts" = "There are no posts yet";
+"no_comments" = "There are no comments yet";
+"create_new_post" = "Create a new post";
+"textfield_title" = "Title";
+"textfield_description" = "Describe your post here...";
+"button_create" = "Create";
+"error_title" = "Oops! Something went wrong";
+"retry_button" = "Retry";
+"tap_to_retry" = "Tap to retry";
+"error_title_required" = "Title is required";
+"error_description_required" = "Description is required";
+"error_post_failed" = "Failed to create post: %@";
+"success_post_created" = "Post created successfully!";

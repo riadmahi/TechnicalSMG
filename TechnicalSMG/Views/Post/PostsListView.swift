@@ -57,7 +57,7 @@ struct PostsListView: View {
     private var loadingState: some View {
         VStack {
             Spacer()
-            ProgressView("Loading...")
+            ProgressView("loading")
             Spacer()
         }
     }
@@ -65,7 +65,7 @@ struct PostsListView: View {
     private var emptyState: some View {
         VStack {
             Spacer()
-            Text("There are no posts yet")
+            Text("no_posts")
                 .brSonomaFont(.medium, 22)
                 .multilineTextAlignment(.center)
             Spacer()
@@ -86,7 +86,7 @@ struct PostsListView: View {
             Spacer()
             NavigationLink(destination: NewPostView(repository: repository)) {
                 Label {
-                    Text("Add new post")
+                    Text("add_new_post")
                         .brSonomaFont(.medium, 16)
                 } icon: {
                     Image(systemName: "plus")

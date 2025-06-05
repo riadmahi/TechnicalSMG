@@ -1,0 +1,24 @@
+//
+//  Localizable.strings
+//  TechnicalSMG
+//
+//  Created by Riad on 05/06/2025.
+//
+
+"loading" = "Téléchargment...";
+"post_details" = "Détails du post";
+"comments" = "Commentaires";
+"add_new_post" = "Ajouter un post";
+"no_posts" = "Aucun post pour le moment";
+"no_comments" = "Aucun commentaire pour le moment";
+"create_new_post" = "Créer un nouveau post";
+"textfield_title" = "Titre";
+"textfield_description" = "Décris ton post ici...";
+"button_create" = "Créer";
+"error_title" = "Oups ! Une erreur est survenue";
+"retry_button" = "Réessayer";
+"tap_to_retry" = "Appuyez pour réessayer";
+"error_title_required" = "Le titre est requis";
+"error_description_required" = "La description est requise";
+"error_post_failed" = "Échec de la création du post : %@";
+"success_post_created" = "Post créé avec succès !";

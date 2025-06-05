@@ -42,13 +42,13 @@ struct NewPostView: View {
     }
 
     private var titleHeader: some View {
-        Text("Create a new post")
+        Text("create_new_post")
             .brSonomaFont(.medium, 24)
     }
 
     private var titleField: some View {
         CustomTextField(
-            placeholder: "Title",
+            placeholder: NSLocalizedString("textfield_title", comment: ""),
             text: $viewModel.title,
             isMultiline: false
         )
@@ -59,7 +59,7 @@ struct NewPostView: View {
 
     private var descriptionField: some View {
         CustomTextField(
-            placeholder: "Describe your post here...",
+            placeholder: NSLocalizedString("textfield_description", comment: ""),
             text: $viewModel.description,
             isMultiline: true
         )
@@ -76,7 +76,7 @@ struct NewPostView: View {
                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     .frame(maxWidth: .infinity)
             } else {
-                Text("Create")
+                Text("button_create")
                     .brSonomaFont(.medium, 16)
                     .frame(maxWidth: .infinity)
             }

@@ -36,7 +36,7 @@ struct PostDetailsView: View {
             }
         }
         .ignoresSafeArea(edges: .top)
-        .navigationTitle("Post Details")
+        .navigationTitle("post_details")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.loadComments()
@@ -61,7 +61,7 @@ struct PostDetailsView: View {
                         Image(systemName: "arrow.clockwise.circle")
                             .font(.system(size: 40))
                             .foregroundColor(.gray)
-                        Text("Tap to retry")
+                        Text("tap_to_retry")
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -98,7 +98,7 @@ struct PostDetailsView: View {
     private var loadingState: some View {
         HStack {
             Spacer()
-            ProgressView("Loading...")
+            ProgressView("loading")
             Spacer()
         }
     }
@@ -106,7 +106,7 @@ struct PostDetailsView: View {
     private var emptyState: some View {
         VStack {
             Spacer()
-            Text("There are no comments.")
+            Text("no_comments")
                 .brSonomaFont(.medium, 22)
                 .multilineTextAlignment(.center)
             Spacer()
@@ -131,7 +131,7 @@ struct PostDetailsView: View {
                 .frame(width: 32, height: 32)
                 .foregroundColor(Color("SilverColor"))
 
-            Text("\(viewModel.comments.count) Comments")
+            Text("\(viewModel.comments.count) \(NSLocalizedString("comments", comment: ""))")
                 .brSonomaFont(.medium, 16)
                 .foregroundColor(Color("SilverColor"))
 
