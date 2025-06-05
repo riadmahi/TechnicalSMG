@@ -21,7 +21,6 @@ struct NewPostView: View {
             content
             toastOverlay
         }
-        .background(Color("BackgroundColor"))
         .ignoresSafeArea(edges: .bottom)
     }
 

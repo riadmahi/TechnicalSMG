@@ -154,7 +154,7 @@ struct PostDetailsView: View {
             Spacer()
         }
         .padding()
-        .background(Color.gray.opacity(0.05))
+        .background(Color("CardColor"))
         .cornerRadius(8)
         .padding(.horizontal, 0)
     }
