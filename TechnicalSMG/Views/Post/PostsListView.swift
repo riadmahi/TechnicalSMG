@@ -35,9 +35,6 @@ struct PostsListView: View {
                     else if viewModel.isLoading {
                         Spacer()
                         ProgressView("Loading...")
-                            .onAppear {
-                                viewModel.loadPosts()
-                            }
                         Spacer()
                     }
                     else if viewModel.posts.isEmpty {
@@ -54,6 +51,9 @@ struct PostsListView: View {
                         }
                         .listStyle(PlainListStyle())
                     }
+                }
+                .onAppear {
+                    viewModel.loadPosts()
                 }
             }
             
