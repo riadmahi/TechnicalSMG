@@ -65,3 +65,7 @@ The app uses a Localizable.strings file and supports both **English** and **Fren
 Custom BR Sonoma fonts are included and used through a convenient font extension. This helps ensure a consistent and modern aesthetic.
 
 ## **Screenshots**
+
+| Post List | Create Post | Post Details |
+|:---------:|:-----------:|:------------:|
+| ![Post List](screenshots/post_list.png) | ![Create Post](screenshots/create_post.png) | ![Post Details](screenshots/post_details.png) |
