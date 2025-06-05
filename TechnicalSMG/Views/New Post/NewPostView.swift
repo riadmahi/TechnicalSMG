@@ -11,6 +11,13 @@ struct NewPostView: View {
     @StateObject private var viewModel: NewPostViewModel
     @Environment(\.dismiss) private var dismiss
     
+    @FocusState private var focusedField: Field?
+
+    private enum Field: Hashable {
+        case title
+        case description
+    }
+    
     init(repository: APIRepository) {
         _viewModel = StateObject(wrappedValue: NewPostViewModel(repository: repository))
     }
@@ -20,7 +27,6 @@ struct NewPostView: View {
             VStack(alignment: .leading, spacing: 32) {
                 Text("Create a new post")
                     .brSonomaFont(.medium, 24)
-                    .fontWeight(.bold)
                     .padding(.horizontal, 20)
                     .padding(.top, 32)
                 
@@ -32,6 +38,11 @@ struct NewPostView: View {
                             .stroke(Color("LineColor"), lineWidth: 1)
                     )
                     .padding(.horizontal, 20)
+                    .focused($focusedField, equals: .title)
+                    .submitLabel(.next)
+                    .onSubmit {
+                        focusedField = .description
+                    }
                 
                 TextField("Describe your post here...", text: $viewModel.description, axis: .vertical)
                     .lineLimit(4...8)
@@ -42,6 +53,7 @@ struct NewPostView: View {
                             .stroke(Color("LineColor"), lineWidth: 1)
                     )
                     .padding(.horizontal, 20)
+                    .focused($focusedField, equals: .description)
                 
                 Button(action: {
                     viewModel.createPost {
