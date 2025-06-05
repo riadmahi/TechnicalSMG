@@ -68,4 +68,4 @@ Custom BR Sonoma fonts are included and used through a convenient font extension
 
 | Post List | Create Post | Post Details |
 |:---------:|:-----------:|:------------:|
-| ![Post List](screenshots/post_list.png) | ![Create Post](screenshots/create_post.png) | ![Post Details](screenshots/post_details.png) |
+| ![Post List](Screenshots/post_list.png) | ![Create Post](Screenshots/create_post.png) | ![Post Details](Screenshots/post_details.png) |
