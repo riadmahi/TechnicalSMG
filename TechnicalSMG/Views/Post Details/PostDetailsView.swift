@@ -11,7 +11,8 @@ import SwiftUI
 
 struct PostDetailsView: View {
     @StateObject private var viewModel: PostDetailsViewModel
-
+    @State private var imageReloadToken = UUID()
+    
     init(post: Post, repository: APIRepository) {
         _viewModel = StateObject(wrappedValue: PostDetailsViewModel(post: post, repository: repository))
     }
@@ -50,7 +51,9 @@ struct PostDetailsView: View {
         ZStack {
             Color.gray.opacity(0.2)
 
-            AsyncImage(url: URL(string: "https://picsum.photos/1200/800")) { phase in
+            AsyncImage(
+                url: URL(string: "https://picsum.photos/1200/800?\(imageReloadToken)"))
+            { phase in
                 switch phase {
                 case .empty:
                     ProgressView()
@@ -60,10 +63,18 @@ struct PostDetailsView: View {
                         .resizable()
                         .transition(.opacity)
                 case .failure:
-                    Image(systemName: "photo")
-                        .font(.largeTitle)
-                        .foregroundColor(.gray)
-                        .transition(.opacity)
+                    VStack {
+                        Image(systemName: "arrow.clockwise.circle")
+                            .font(.system(size: 40))
+                            .foregroundColor(.gray)
+                        Text("Tap to retry")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    .onTapGesture {
+                        imageReloadToken = UUID() // Random UUID used to force to regenerate an image
+                    }
+                    .transition(.opacity)
                 @unknown default:
                     EmptyView()
                 }
@@ -76,14 +87,25 @@ struct PostDetailsView: View {
     private var commentsSection: some View {
         Group {
             if let error = viewModel.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 8)
+                ErrorView(
+                    message: error,
+                    onRetry: {
+                        viewModel.loadComments()
+                    }
+                )
+            }
+            else if viewModel.isLoading {
+                HStack {
+                    Spacer()
+                    ProgressView("Loading...")
+                    Spacer()
+                }
             } else if viewModel.comments.isEmpty {
-                ProgressView("Loading comments...")
-                    .padding(.horizontal, 24)
-                    .padding(.top, 8)
+                Spacer()
+                Text("There is no comments.")
+                    .brSonomaFont(.medium, 22)
+                    .multilineTextAlignment(.center)
+                Spacer()
             } else {
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
@@ -92,7 +114,7 @@ struct PostDetailsView: View {
                             .frame(width: 32, height: 32)
                             .foregroundColor(Color("SilverColor"))
 
-                        Text("3 Comments")
+                        Text("\(viewModel.comments.count) Comments")
                             .brSonomaFont(.medium, 16)
                             .foregroundColor(Color("SilverColor"))
                         Spacer()
@@ -121,6 +143,9 @@ struct PostDetailsView: View {
                 }
                 .padding(.top, 8)
             }
+        }
+        .onAppear {
+            viewModel.loadComments()
         }
     }
 }

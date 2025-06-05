@@ -12,10 +12,10 @@ import Foundation
 class PostDetailsViewModel: ObservableObject {
     
     let post: Post
-    
     @Published var comments: [Comment] = []
-    
     @Published var errorMessage: String? = nil
+    @Published var isLoading: Bool = true
+
         
     private let repository: APIRepository
         
@@ -25,10 +25,13 @@ class PostDetailsViewModel: ObservableObject {
     }
     
     func loadComments() {
+        self.errorMessage = nil
+        self.isLoading = true
         repository.fetchComments(for: post.id) { [weak self] fetchedComments, error in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
+                self.isLoading = false
                 if let error = error {
                     self.errorMessage = error.localizedDescription
                 } else if let fetched = fetchedComments {
