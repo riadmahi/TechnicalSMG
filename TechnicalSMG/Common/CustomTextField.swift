@@ -1,3 +1,12 @@
+//
+//  CustomTextField.swift
+//  TechnicalSMG
+//
+//  Created by Riad on 05/06/2025.
+//
+
+import SwiftUI
+
 struct CustomTextField: View {
     let placeholder: String
     @Binding var text: String
