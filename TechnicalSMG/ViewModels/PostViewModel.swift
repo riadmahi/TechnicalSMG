@@ -9,6 +9,7 @@ import Foundation
 
 @MainActor
 class PostViewModel: ObservableObject {
+    @Published var isLoading: Bool = true
     @Published var posts: [Post] = []
     @Published var errorMessage: String? = nil
     
@@ -19,9 +20,12 @@ class PostViewModel: ObservableObject {
     }
     
     func loadPosts() {
+        self.errorMessage = nil
+        self.isLoading = true
         repository.fetchPosts { [weak self] posts, error in
             guard let self = self else { return }
             DispatchQueue.main.async {
+                self.isLoading = false
                 if let error = error {
                     self.errorMessage = error.localizedDescription
                 } else if let posts = posts {

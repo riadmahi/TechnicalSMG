@@ -25,15 +25,27 @@ struct PostsListView: View {
                     .frame(height: 20)
                 Group {
                     if let error = viewModel.errorMessage {
-                        Text(error)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                    } else if viewModel.posts.isEmpty {
+                        ErrorView(
+                            message: error,
+                            onRetry: {
+                                viewModel.loadPosts()
+                            }
+                        )
+                    }
+                    else if viewModel.isLoading {
+                        Spacer()
                         ProgressView("Loading...")
                             .onAppear {
                                 viewModel.loadPosts()
                             }
+                        Spacer()
+                    }
+                    else if viewModel.posts.isEmpty {
+                        Spacer()
+                        Text("There is no posts yet")
+                            .brSonomaFont(.medium, 22)
+                            .multilineTextAlignment(.center)
+                        Spacer()
                     } else {
                         List(viewModel.posts) { post in
                             NavigationLink(destination: PostDetailsView(post: post, repository: repository)) {
