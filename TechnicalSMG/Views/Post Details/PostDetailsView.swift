@@ -7,12 +7,10 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct PostDetailsView: View {
     @StateObject private var viewModel: PostDetailsViewModel
     @State private var imageReloadToken = UUID()
-    
+
     init(post: Post, repository: APIRepository) {
         _viewModel = StateObject(wrappedValue: PostDetailsViewModel(post: post, repository: repository))
     }
@@ -26,15 +24,14 @@ struct PostDetailsView: View {
                     Text(viewModel.post.title)
                         .brSonomaFont(.medium, 20)
                         .foregroundColor(.primary)
-                        .padding(.horizontal, 24)
 
                     Text(viewModel.post.body)
                         .brSonomaFont(.regular, 18)
                         .lineSpacing(4)
-                        .padding(.horizontal, 24)
 
                     commentsSection
                 }
+                .padding(.horizontal, 24)
                 .padding(.top, 24)
             }
         }
@@ -46,14 +43,11 @@ struct PostDetailsView: View {
         }
     }
 
-
     private var imageHeader: some View {
         ZStack {
             Color.gray.opacity(0.2)
 
-            AsyncImage(
-                url: URL(string: "https://picsum.photos/1200/800?\(imageReloadToken)"))
-            { phase in
+            AsyncImage(url: URL(string: "https://picsum.photos/1200/800?\(imageReloadToken)")) { phase in
                 switch phase {
                 case .empty:
                     ProgressView()
@@ -63,7 +57,7 @@ struct PostDetailsView: View {
                         .resizable()
                         .transition(.opacity)
                 case .failure:
-                    VStack {
+                    VStack(spacing: 6) {
                         Image(systemName: "arrow.clockwise.circle")
                             .font(.system(size: 40))
                             .foregroundColor(.gray)
@@ -72,7 +66,7 @@ struct PostDetailsView: View {
                             .foregroundColor(.gray)
                     }
                     .onTapGesture {
-                        imageReloadToken = UUID() // Random UUID used to force to regenerate an image
+                        imageReloadToken = UUID() // Dummy value to regenerate a new photo URL
                     }
                     .transition(.opacity)
                 @unknown default:
@@ -84,68 +78,84 @@ struct PostDetailsView: View {
         .clipped()
     }
 
+
     private var commentsSection: some View {
         Group {
             if let error = viewModel.errorMessage {
-                ErrorView(
-                    message: error,
-                    onRetry: {
-                        viewModel.loadComments()
-                    }
-                )
-            }
-            else if viewModel.isLoading {
-                HStack {
-                    Spacer()
-                    ProgressView("Loading...")
-                    Spacer()
-                }
+                ErrorView(message: error, onRetry: {
+                    viewModel.loadComments()
+                })
+            } else if viewModel.isLoading {
+                loadingState
             } else if viewModel.comments.isEmpty {
-                Spacer()
-                Text("There is no comments.")
-                    .brSonomaFont(.medium, 22)
-                    .multilineTextAlignment(.center)
-                Spacer()
+                emptyState
             } else {
-                VStack(spacing: 12) {
-                    HStack(spacing: 12) {
-                        Image("CommentIcon")
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                            .foregroundColor(Color("SilverColor"))
-
-                        Text("\(viewModel.comments.count) Comments")
-                            .brSonomaFont(.medium, 16)
-                            .foregroundColor(Color("SilverColor"))
-                        Spacer()
-                    }
-                    .padding(.horizontal, 24)
-
-                    ForEach(viewModel.comments) { comment in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text(comment.email)
-                                    .brSonomaFont(.medium, 12)
-                                    .foregroundColor(.accentColor)
-                                Text(comment.name)
-                                    .brSonomaFont(.medium, 14)
-                                Text(comment.body)
-                                    .brSonomaFont(.regular, 13)
-                                
-                            }
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.05))
-                        .cornerRadius(8)
-                        .padding(.horizontal, 24)
-                    }
-                }
-                .padding(.top, 8)
+                commentsList
             }
         }
-        .onAppear {
-            viewModel.loadComments()
+    }
+
+    private var loadingState: some View {
+        HStack {
+            Spacer()
+            ProgressView("Loading...")
+            Spacer()
         }
+    }
+
+    private var emptyState: some View {
+        VStack {
+            Spacer()
+            Text("There are no comments.")
+                .brSonomaFont(.medium, 22)
+                .multilineTextAlignment(.center)
+            Spacer()
+        }
+    }
+
+    private var commentsList: some View {
+        VStack(spacing: 12) {
+            commentHeader
+
+            ForEach(viewModel.comments) { comment in
+                commentItem(comment)
+            }
+        }
+        .padding(.top, 8)
+    }
+
+    private var commentHeader: some View {
+        HStack(spacing: 12) {
+            Image("CommentIcon")
+                .resizable()
+                .frame(width: 32, height: 32)
+                .foregroundColor(Color("SilverColor"))
+
+            Text("\(viewModel.comments.count) Comments")
+                .brSonomaFont(.medium, 16)
+                .foregroundColor(Color("SilverColor"))
+
+            Spacer()
+        }
+        .padding(.horizontal, 0)
+    }
+
+    private func commentItem(_ comment: Comment) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(comment.email)
+                    .brSonomaFont(.medium, 12)
+                    .foregroundColor(.accentColor)
+                Text(comment.name)
+                    .brSonomaFont(.medium, 14)
+                Text(comment.body)
+                    .brSonomaFont(.regular, 13)
+            }
+            Spacer()
+        }
+        .padding()
+        .background(Color.gray.opacity(0.05))
+        .cornerRadius(8)
+        .padding(.horizontal, 0)
     }
 }
